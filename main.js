@@ -1,7 +1,6 @@
 import Fastify from 'fastify';
-
-import { appRoutes } from './routes.js';
 import { StreamForLogger } from './infrastructure/logger.js';
+import { appRoutes } from './router/index.js';
 
 const LOG_FOLDER_PATH = './log';
 
@@ -11,13 +10,14 @@ const fastify = Fastify({
   logger: { level: 'info', stream: streamForLogger },
 });
 
-fastify.register(appRoutes, { prefix: '/app' });
+fastify.register(appRoutes, { prefix: '/api' });
 
 const server = async () => {
   try {
     await fastify.listen({ port: 5000 });
   } catch (error) {
-    console.error(error);
+    fastify.log.error(error, 'Server ERROR');
+    process.exit(1);
   }
 };
 

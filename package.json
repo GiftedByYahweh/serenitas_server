@@ -2,16 +2,18 @@
   "name": "server",
   "version": "1.0.0",
   "description": "",
+  "private": true,
   "main": "main.js",
   "type": "module",
   "scripts": {
     "start": "node main.js",
+    "dev": "node --watch main.js",
     "test": "echo \"Error: no test specified\" && exit 1",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix"
   },
   "keywords": [],
-  "author": "",
+  "author": "giftedbyyahweh",
   "license": "ISC",
   "dependencies": {
     "fastify": "^5.5.0"
