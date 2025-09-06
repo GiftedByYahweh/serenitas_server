@@ -1,32 +1,26 @@
+// eslint.config.js
 import js from '@eslint/js';
 import globals from 'globals';
-import tseslint from 'typescript-eslint';
-import json from '@eslint/json';
-import importPlugin from 'eslint-plugin-import';
-import { defineConfig } from 'eslint/config';
 
-export default defineConfig([
-  js.configs.recommended,
-  ...tseslint.configs.recommended,
-  json.configs.recommended,
-
+export default [
+  { ignores: ['dist'] },
   {
-    env: {
-      node: true,
-      es2021: true,
-    },
-    files: ['**/*.{js,mjs,cjs,ts,mts,cts}'],
+    files: ['**/*.{js,ts}'],
     languageOptions: {
       ecmaVersion: 'latest',
       sourceType: 'module',
-      globals: globals.node,
+      globals: {
+        ...globals.browser,
+        ...globals.node,
+        BigInt: 'readonly',
+      },
+      parserOptions: {
+        ecmaFeatures: { jsx: true },
+      },
     },
-    plugins: {
-      import: importPlugin,
-    },
-    ...importPlugin.flatConfigs.recommended,
-    ...importPlugin.flatConfigs.typescript,
     rules: {
+      ...js.configs.recommended.rules,
+
       indent: ['error', 2],
       'linebreak-style': ['error', 'unix'],
       quotes: ['error', 'single'],
@@ -50,9 +44,7 @@ export default defineConfig([
         {
           before: true,
           after: true,
-          overrides: {
-            function: { after: false },
-          },
+          overrides: { function: { after: false } },
         },
       ],
       'max-len': ['error', { code: 80, ignoreUrls: true }],
@@ -79,11 +71,7 @@ export default defineConfig([
       'space-infix-ops': ['error'],
       'space-unary-ops': [
         'error',
-        {
-          words: true,
-          nonwords: false,
-          overrides: { typeof: false },
-        },
+        { words: true, nonwords: false, overrides: { typeof: false } },
       ],
       'no-unreachable': ['error'],
       'no-global-assign': ['error'],
@@ -110,20 +98,6 @@ export default defineConfig([
       'prefer-spread': ['error'],
       'rest-spread-spacing': ['error', 'never'],
       'template-curly-spacing': ['error', 'never'],
-
-      'import/no-unresolved': 'error',
-      'import/order': [
-        'error',
-        {
-          groups: [
-            ['builtin', 'external'],
-            ['internal'],
-            ['parent', 'sibling', 'index'],
-          ],
-          'newlines-between': 'always',
-        },
-      ],
-      'import/newline-after-import': 'error',
     },
   },
-]);
+];
