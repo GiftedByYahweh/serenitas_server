@@ -1,6 +1,7 @@
 // eslint.config.js
 import js from '@eslint/js';
 import globals from 'globals';
+import importPlugin from 'eslint-plugin-import';
 
 export default [
   { ignores: ['dist'] },
@@ -18,9 +19,12 @@ export default [
         ecmaFeatures: { jsx: true },
       },
     },
+    plugins: {
+      import: importPlugin,
+    },
     rules: {
       ...js.configs.recommended.rules,
-
+      'import/no-unresolved': 'error',
       indent: ['error', 2],
       'linebreak-style': ['error', 'unix'],
       quotes: ['error', 'single'],
