@@ -1,7 +1,6 @@
 import path from 'node:path';
+import util from 'node:util';
 import fs from 'node:fs';
-
-const util = {};
 
 export class Logger {
   constructor(logger) {
