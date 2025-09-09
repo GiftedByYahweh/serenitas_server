@@ -1,4 +1,4 @@
-import { ServiceLocator } from '../../infrastructure/service-locator';
+import { ServiceLocator } from '../../infrastructure/service-locator.js';
 
 const common = ServiceLocator.get('common');
 const userService = ServiceLocator.get('users');
