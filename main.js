@@ -1,10 +1,11 @@
-import './src/setup.js';
+import pg from 'pg';
 import 'dotenv/config';
 import Fastify from 'fastify';
-import { StreamForLogger } from './src/infrastructure/logger.js';
+import { appServices } from './src/setup.js';
 import appRoutes from './src/router/index.js';
 import { appConfig } from './src/appConfig.js';
-import pg from 'pg';
+import { StreamForLogger } from './src/infrastructure/logger.js';
+import { httpErrorHandler } from './src/infrastructure/httpErrorHandling.js';
 
 const LOG_FOLDER_PATH = './log';
 
@@ -13,7 +14,8 @@ const streamForLogger = new StreamForLogger(LOG_FOLDER_PATH);
 const fastify = Fastify({
   logger: { level: 'info', stream: streamForLogger },
 });
-
+fastify.setErrorHandler(httpErrorHandler);
+fastify.decorate('services', appServices);
 await fastify.register(appRoutes);
 
 const server = async () => {

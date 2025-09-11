@@ -1,15 +1,12 @@
-import { ServiceLocator } from '../../infrastructure/service-locator.js';
+export function userService({ repo }) {
+  const create = async (name) => await repo.findOne({ where: name });
 
-const repo = ServiceLocator.get('db');
+  const findByEmail = async (email) => {
+    const result = await repo.findOne({
+      where: { email },
+    });
+    return result;
+  };
 
-const create = async (name) => await repo.findOne({ where: name });
-
-const findByEmail = async (email) =>
-  await repo.findOne({
-    where: { email },
-  });
-
-export const userService = {
-  create: (name) => create(name),
-  findByEmail: (email) => findByEmail(email),
-};
+  return { create, findByEmail };
+}

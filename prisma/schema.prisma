@@ -1,0 +1,46 @@
+// This is your Prisma schema file
+// Docs: https://pris.ly/d/prisma-schema
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        Int         @id @default(autoincrement())
+  email     String      @unique
+  username  String      @db.Text
+  password  String      @db.Text
+  sessions  Session[]
+  DiaryNote DiaryNote[]
+
+  @@map("users")
+}
+
+model Session {
+  id     Int     @id @default(autoincrement())
+  token  String  @unique
+  userId Int
+  user   User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  ip     String? @db.Inet
+  data   Json
+
+  @@index([userId])
+  @@map("sessions")
+}
+
+model DiaryNote {
+  id           Int      @id @default(autoincrement())
+  userId       Int
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  title        String   @db.Text
+  content      String   @db.Text
+  isLiked      Boolean  @db.Boolean
+  isPrivate    Boolean  @db.Boolean
+  hiddenStatus Boolean  @db.Boolean
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  @@index([userId])
+  @@map("diary_notes")
+}
