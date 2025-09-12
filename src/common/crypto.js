@@ -18,4 +18,6 @@ const verify = (hashedValue, value) =>
     });
   });
 
-export const cryptoService = { hash, verify };
+const generate = (id) => `TEST${id}TEST`;
+
+export const cryptoService = { hash, verify, generate };

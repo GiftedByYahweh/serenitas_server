@@ -5,7 +5,7 @@ export function authService(userService, common) {
     if (!email || !password) apiError.BadRequest('Invalid data');
     const currentUser = await userService.findByEmail(email);
     if (!currentUser) apiError.BadRequest('Wrong email or password');
-    const correctPassword = crypto.verify(currentUser.password, password);
+    const correctPassword = await crypto.verify(currentUser.password, password);
     if (!correctPassword) apiError.BadRequest('Wrong email or password');
     const generatedSession = await crypto.generate(currentUser.id);
     return { userId: currentUser.id, session: generatedSession };
@@ -17,12 +17,12 @@ export function authService(userService, common) {
     const registratedUser = await userService.findByEmail(email);
     if (registratedUser) apiError.Conflict(`User ${email} already exist`);
     const hashPassword = await crypto.hash(password);
-    const regastratedUser = await userService.create({
+    const result = await userService.create({
       email,
       password: hashPassword,
       username,
     });
-    return { userId: regastratedUser.id };
+    return { id: result.id, username: result.username, email: result.email };
   };
 
   return { login, registration };

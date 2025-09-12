@@ -1,12 +1,14 @@
 export function userService({ repo }) {
-  const create = async (name) => await repo.findOne({ where: name });
+  const usersRepo = repo('users');
 
-  const findByEmail = async (email) => {
-    const result = await repo.findOne({
-      where: { email },
-    });
-    return result;
-  };
+  async function create(payload) {
+    const newUser = await usersRepo.create(payload);
+    return newUser.rows[0];
+  }
+  async function findByEmail(email) {
+    const { rows } = await usersRepo.findOne('email', email);
+    return rows[0];
+  }
 
   return { create, findByEmail };
 }
