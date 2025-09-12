@@ -6,11 +6,11 @@ const crud = (pool) => (table) => ({
     return result.rows;
   },
 
-  async read(id, fields = ['*']) {
+  async findOne(field, value, fields = ['*']) {
     const names = fields.join(', ');
     const sql = `SELECT ${names} FROM ${table}`;
-    if (!id) return pool.query(sql);
-    return pool.query(`${sql} WHERE id = $1`, [id]);
+    if (!value) return pool.query(sql);
+    return pool.query(`${sql} WHERE ${field} = $1`, [value]);
   },
 
   async create({ ...record }) {
@@ -49,4 +49,4 @@ const crud = (pool) => (table) => ({
   },
 });
 
-export default { crud, pg };
+export default (options) => crud(new pg.Pool(options));
