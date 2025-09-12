@@ -1,7 +1,7 @@
 export const appConfig = {
   port: Number(process.env.PORT || 5000),
   db: {
-    name: process.env.DB_NAME,
+    database: process.env.DB_NAME,
     host: process.env.DB_HOST,
     port: process.env.DB_PORT,
     user: process.env.DB_USER,
