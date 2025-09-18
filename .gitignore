@@ -2,5 +2,5 @@
 .vscode
 .idea
 .env
-/log
+/logs
 /generated/prisma
