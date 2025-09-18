@@ -8,7 +8,7 @@ import { StreamForLogger } from './src/infrastructure/logger.js';
 import { httpErrorHandler } from './src/infrastructure/httpErrorHandling.js';
 import { common } from './src/common/index.js';
 
-const LOG_FOLDER_PATH = './log';
+const LOG_FOLDER_PATH = './logs';
 const streamForLogger = new StreamForLogger(LOG_FOLDER_PATH);
 
 const database = initDatabase(appConfig.db);
