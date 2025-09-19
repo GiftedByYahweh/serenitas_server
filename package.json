@@ -16,6 +16,10 @@
   "author": "giftedbyyahweh",
   "license": "ISC",
   "dependencies": {
+    "@fastify/cookie": "^11.0.2",
+    "@fastify/session": "^11.1.0",
+    "@prisma/client": "^6.16.2",
+    "connect-pg-simple": "^10.0.0",
     "dotenv": "^17.2.2",
     "fastify": "^5.5.0",
     "fastify-plugin": "^5.0.1",

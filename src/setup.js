@@ -1,8 +1,10 @@
-import { userService } from './modules/users/users.service.js';
-import { authService } from './modules/auth/auth.service.js';
+import { userService } from './modules/users/index.js';
+import { authService } from './modules/auth/index.js';
+import { dailyDiaryService } from './modules/daily-diary/index.js';
 
 export const appServices = (repo, common) => {
-  const user = userService({ repo });
+  const user = userService(repo);
   const auth = authService(user, common);
-  return { user, auth };
+  const dailyDiary = dailyDiaryService(repo);
+  return { user, auth, dailyDiary };
 };

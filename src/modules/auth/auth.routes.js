@@ -7,7 +7,8 @@ export async function authRoutes(fastify) {
     handler: async (req) => {
       const { email, password } = req.body;
       const result = await authService.login({ email, password });
-      return result;
+      req.session.userId = result.id;
+      return { data: result };
     },
   });
 
@@ -21,7 +22,8 @@ export async function authRoutes(fastify) {
         username,
         password,
       });
-      return result;
+      req.session.userId = result.id;
+      return { data: result };
     },
   });
 }

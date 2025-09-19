@@ -1,46 +1,44 @@
-// This is your Prisma schema file
-// Docs: https://pris.ly/d/prisma-schema
-
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
+generator client {
+  provider = "prisma-client-js"
+}
+
 model User {
-  id        Int         @id @default(autoincrement())
-  email     String      @unique
-  username  String      @db.Text
-  password  String      @db.Text
-  sessions  Session[]
-  DiaryNote DiaryNote[]
+  id         Int          @id @default(autoincrement())
+  email      String       @unique
+  username   String
+  password   String
+  createDate DateTime     @default(now()) @map("created_date") @db.Timestamptz(6)
+  diaryNotes DailyDiary[]
 
   @@map("users")
 }
 
-model Session {
-  id     Int     @id @default(autoincrement())
-  token  String  @unique
-  userId Int
-  user   User    @relation(fields: [userId], references: [id], onDelete: Cascade)
-  ip     String? @db.Inet
-  data   Json
+model DailyDiary {
+  id           Int       @id @default(autoincrement())
+  title        String
+  content      String
+  createDate   DateTime  @default(now()) @map("created_date") @db.Timestamptz(6)
+  hiddenStatus Boolean   @default(false) @map("hidden_status")
+  isLiked      Boolean   @default(false) @map("is_liked")
+  isPrivate    Boolean   @default(false) @map("is_private")
+  updateDate   DateTime? @map("updated_date") @db.Timestamptz(6)
+  userId       Int       @map("user_id")
+  user         User      @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([userId])
-  @@map("sessions")
+  @@map("daily_diary")
 }
 
-model DiaryNote {
-  id           Int      @id @default(autoincrement())
-  userId       Int
-  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  title        String   @db.Text
-  content      String   @db.Text
-  isLiked      Boolean  @db.Boolean
-  isPrivate    Boolean  @db.Boolean
-  hiddenStatus Boolean  @db.Boolean
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
+model Session {
+  sid    String   @id(map: "session_pkey") @db.VarChar
+  sess   Json     @db.Json
+  expire DateTime @db.Timestamp(6)
 
-  @@index([userId])
-  @@map("diary_notes")
+  @@index([expire], map: "IDX_session_expire")
+  @@map("sessions")
 }

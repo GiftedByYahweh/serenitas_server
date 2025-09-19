@@ -6,7 +6,7 @@ const crud = (pool) => (table) => ({
     return result.rows;
   },
 
-  async findOne(field, value, fields = ['*']) {
+  async find(field, value, fields = ['*']) {
     const names = fields.join(', ');
     const sql = `SELECT ${names} FROM ${table}`;
     if (!value) return pool.query(sql);
@@ -51,4 +51,6 @@ const crud = (pool) => (table) => ({
   },
 });
 
-export default (options) => crud(new pg.Pool(options));
+const initDatabase = (options) => crud(new pg.Pool(options));
+
+export { initDatabase, pg };

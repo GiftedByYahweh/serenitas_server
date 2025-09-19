@@ -7,8 +7,7 @@ export function authService(userService, common) {
     if (!currentUser) apiError.BadRequest('Wrong email or password');
     const correctPassword = await crypto.verify(currentUser.password, password);
     if (!correctPassword) apiError.BadRequest('Wrong email or password');
-    const generatedSession = await crypto.generate(currentUser.id);
-    return { userId: currentUser.id, session: generatedSession };
+    return { id: currentUser.id };
   };
 
   const registration = async (payload) => {
@@ -22,7 +21,7 @@ export function authService(userService, common) {
       password: hashPassword,
       username,
     });
-    return { id: result.id, username: result.username, email: result.email };
+    return { id: result.id };
   };
 
   return { login, registration };
